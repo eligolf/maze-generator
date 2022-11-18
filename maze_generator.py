@@ -34,10 +34,12 @@ class Setup:
         self.current = self.grid[0][0]
         self.current.visited = True
 
+        self.calculating = True
+        self.next = self.random_neighbor()
+
     def run(self):
         
         # Main loop
-        self.calculating = True
         while self.calculating:
             self.clock.tick(FPS/2)
             self.draw()
@@ -58,7 +60,6 @@ class Setup:
                     # quit()
 
     def calculate(self):
-        self.next = self.random_neighbor()
         if self.next:
             self.next.visited = True
             self.remove_wall()
@@ -74,16 +75,16 @@ class Setup:
         x = self.current.i
         y = self.current.j
 
-        if y - 1 >= 0 and self.grid[x][y-1].visited == False:
+        if y - 1 >= 0 and not self.grid[x][y-1].visited:
             neighbors.append(self.grid[x][y-1])
             
-        if x + 1 <= SQY-1 and self.grid[x+1][y].visited == False:
+        if x + 1 <= SQY-1 and not self.grid[x+1][y].visited:
             neighbors.append(self.grid[x+1][y])
             
-        if y + 1 <= SQY-1 and self.grid[x][y+1].visited == False:
+        if y + 1 <= SQY-1 and not self.grid[x][y+1].visited:
             neighbors.append(self.grid[x][y+1])
             
-        if x - 1 >= 0 and self.grid[x-1][y].visited == False:
+        if x - 1 >= 0 and not self.grid[x-1][y].visited:
             neighbors.append(self.grid[x-1][y])      
 
         if len(neighbors) > 0:
@@ -97,16 +98,16 @@ class Setup:
         y = self.current.j - self.next.j
         
         if x < 0:
-            self.current.wall[1] = False # Right
+            self.current.wall[1] = False  # Right
             self.next.wall[3] = False
         elif x > 0:
-            self.current.wall[3] = False # Left
+            self.current.wall[3] = False  # Left
             self.next.wall[1] = False
         elif y > 0:
-            self.current.wall[0] = False # Top
+            self.current.wall[0] = False  # Top
             self.next.wall[2] = False
         elif y < 0:
-            self.current.wall[2] = False # Bottom
+            self.current.wall[2] = False  # Bottom
             self.next.wall[0] = False
         
     def draw(self):
